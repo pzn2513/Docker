@@ -18,11 +18,23 @@ chmod +x /usr/local/bin/docker-compose
 ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 ```
 
-### 配置nginx+php+mysql+phpmyadmin
-要点：  
-1、nginx需要配置php-fpm  
-2、php用fpm版本，并用dockerfile进行拓展编译  
-3、mysql指定初始密码，并修改加密方式  
+## 配置nginx+php+mysql+phpmyadmin
+### 要点：  
+#### 1、nginx需要配置php-fpm  
+nginx配置文件在：  
+/etc/nginx/conf.d/default.conf
+加入一下代码
+```bash
+    location ~ \.php$ {
+        root           html;
+        fastcgi_pass   172.24.0.3:9000;#此处需要填写你的php容器的docker内部通讯ip
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  /usr/share/nginx/html/$fastcgi_script_name;
+        include        fastcgi_params;
+    }
+```
+#### 2、php用fpm版本，并用dockerfile进行拓展编译  
+#### 3、mysql指定初始密码，并修改加密方式  
 
 
 # docker高级指令

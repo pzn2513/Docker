@@ -48,12 +48,19 @@ flush privileges;
 
 #### 4、下载并配置phpmyadmin
 config.inc.php是它的配置文件，默认没有。可以cp config.sample.inc.php config.inc.php  
+连接问题：将config.inc.php中
+```bash
+$cfg['Servers'][$i]['host'] = 'mysql ip';
+```
 缓存问题：在phpmyadmin目录下
 ```bash
 mkdir tmp
 chmod 777 tmp
 ```
-
+短语密码：将config.inc.php中
+```bash
+$cfg['blowfish_secret'] = 'qwertyuioplkjhgfdsazxcvbnm123456';
+```
 # docker高级指令
 ```bash
 docker inspect -f '{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -q)

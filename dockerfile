@@ -13,3 +13,4 @@ RUN apt-get update && apt-get install -y \
 && pecl install redis-4.3.0 \
 && pecl install swoole \
 && docker-php-ext-enable redis swoole
+

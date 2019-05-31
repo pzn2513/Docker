@@ -1,7 +1,7 @@
 # Docker
 Docker相关功能实践，对学习到的知识进行汇总记录
 
-安装环境：centos7.6
+安装环境：centos7.6  
 docker安装
 ```bash
 yum install -y yum-utils device-mapper-persistent-data lvm2
@@ -17,3 +17,4 @@ curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compo
 chmod +x /usr/local/bin/docker-compose
 ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 ```
+

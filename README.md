@@ -22,7 +22,7 @@ ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 ### 要点：  
 #### 1、nginx需要配置php-fpm  
 nginx配置文件在：  
-/etc/nginx/conf.d/default.conf
+/etc/nginx/conf.d/default.conf  
 加入一下代码
 ```bash
     location ~ \.php$ {
@@ -33,9 +33,10 @@ nginx配置文件在：
         include        fastcgi_params;
     }
 ```
-#### 2、php用fpm版本，并用dockerfile进行拓展编译  
+#### 2、php用fpm版本，并用dockerfile进行拓展编译
+docker build -t myphp .
 #### 3、mysql指定初始密码，并修改加密方式  
-
+见docker-compose.yml
 
 # docker高级指令
 ```bash

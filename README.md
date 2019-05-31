@@ -18,3 +18,8 @@ chmod +x /usr/local/bin/docker-compose
 ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 ```
 
+### 配置nginx+php+mysql+phpmyadmin
+要点：  
+1、nginx需要配置php-fpm  
+2、php用fpm版本，并用dockerfile进行拓展编译  
+3、mysql指定初始密码，并修改加密方式  

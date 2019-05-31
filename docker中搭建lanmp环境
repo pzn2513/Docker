@@ -13,3 +13,6 @@ tar -cvpf /home/mysystem.tar --directory=/ --exclude=proc --exclude=sys --exclud
 2、在docker中运行该image(pzn-centos),并在其中搭建lanmp环境，使其能成功在互联网上访问
 
 Failed to get D-Bus connection: Operation not permitted问题
+
+===========  重点看此分割线以下  ============
+利用docker-compose组织nginx+php+

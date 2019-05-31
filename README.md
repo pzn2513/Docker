@@ -23,3 +23,9 @@ ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 1、nginx需要配置php-fpm  
 2、php用fpm版本，并用dockerfile进行拓展编译  
 3、mysql指定初始密码，并修改加密方式  
+
+
+# docker高级指令
+```bash
+docker inspect -f '{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -q)
+```

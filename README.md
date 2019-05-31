@@ -40,15 +40,19 @@ docker build -t myphp .
 #### 3、mysql指定初始密码，并修改加密方式  
 见docker-compose.yml  
 启动后进入mysql容器：docker exec -it mysql bash  
-改密码及加密方式：
+改密码及加密方式(不改密码会拒绝非本地登陆方式)：
 ```bash
 alter user 'root'@'%' identified with mysql_native_password by 'password';
 flush privileges;
 ```
 
-#### 4、加入phpmyadmin
-config.inc.php是它的配置文件，默认没有。可以cp config.sample.inc.php
-
+#### 4、下载并配置phpmyadmin
+config.inc.php是它的配置文件，默认没有。可以cp config.sample.inc.php config.inc.php  
+缓存问题：在phpmyadmin目录下
+```bash
+mkdir tmp
+chmod 777 tmp
+```
 
 # docker高级指令
 ```bash

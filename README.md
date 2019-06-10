@@ -41,8 +41,7 @@ nginx配置文件在：
 ```
 
 #### 4、mysql指定初始密码，并修改加密方式  
-见docker-compose.yml  
-启动后进入mysql容器：docker exec -it mysql bash  
+进入mysql容器：docker exec -it mysql bash  
 改密码及加密方式(不改密码会拒绝非本地登陆方式)：
 ```bash
 alter user 'root'@'%' identified with mysql_native_password by 'password';

@@ -49,6 +49,7 @@ flush privileges;
 ```
 
 #### 5、下载并配置phpmyadmin
+https://www.phpmyadmin.net/downloads/
 config.inc.php是它的配置文件，默认没有。可以cp config.sample.inc.php config.inc.php  
 连接问题：将config.inc.php中
 ```bash

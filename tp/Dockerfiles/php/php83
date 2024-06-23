@@ -1,0 +1,15 @@
+# 使用官方的 PHP 镜像作为基础镜像
+FROM php:8.3-fpm
+WORKDIR /wwwroot
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    unzip \
+    && docker-php-ext-install zip
+# 安装 Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+# 当 ENTRYPOINT 和 CMD 一起使用时，CMD 的内容会作为参数传递给 ENTRYPOINT
+CMD ["php-fpm", "-F"]

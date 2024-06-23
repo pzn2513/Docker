@@ -8,5 +8,14 @@ else
   echo "Project directory already exists. Skipping project creation."
 fi
 
-# 执行传递的命令
-exec "$@"
+# 进入 tp 目录并确保权限
+cd /wwwroot/tp
+chmod +x think
+# 检查并安装 topthink/think-swoole
+if ! composer show | grep -q "topthink/think-swoole"; then
+  echo "Installing topthink/think-swoole..."
+  composer require topthink/think-swoole
+else
+  echo "topthink/think-swoole already exists. Skipping."
+fi
+exec php think swoole

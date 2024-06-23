@@ -1,3 +1,11 @@
+操作步骤：
+cd tp
+docker-compose up -d --build
+
+访问https://localhost出现tp主页即为成功。
+
+
+
 项目环境配置说明
 该项目使用 Docker Compose 来管理多个服务，以便在开发和测试过程中提供一致的环境。以下是每个服务的配置说明：
 

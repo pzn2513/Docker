@@ -1,6 +1,6 @@
-操作步骤：
-cd tp
-docker-compose up -d --build
+操作步骤：  
+cd tp  
+docker-compose up -d --build  
 
 访问https://localhost出现tp主页即为成功。
 

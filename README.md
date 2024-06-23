@@ -2,7 +2,7 @@
 cd tp  
 docker-compose up -d --build  
 
-访问https://localhost出现tp主页即为成功。
+访问https://localhost 出现tp主页即为成功。
 
 
 

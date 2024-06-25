@@ -16,6 +16,10 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # 安装 Swoole 扩展
 RUN pecl install swoole \
     && docker-php-ext-enable swoole
+# 安装 Redis 扩展
+RUN pecl install redis \
+    && docker-php-ext-enable redis
+
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh

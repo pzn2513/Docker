@@ -1,8 +1,8 @@
 services:
   php:
     build:
-      context: Dockerfiles/php
-      dockerfile: php83
+      context: ./Dockerfiles/php
+      dockerfile: php.dockerfile
     volumes:
       - ./wwwroot:/wwwroot
       - ./etc/php/php.ini:/usr/local/etc/php/php.ini
@@ -11,8 +11,8 @@ services:
   nginx:
     image: nginx
     ports:
-      - "80:80"
-      - "443:443"
+      - 80:80
+      - 443:443
     volumes:
       - ./wwwroot:/wwwroot
       - ./etc/nginx/ssl:/etc/nginx/ssl
@@ -22,17 +22,19 @@ services:
     networks:
       - backend
     environment:
-      - "TZ=Asia/Shanghai"
+      - TZ=Asia/Shanghai
   mysql:
-    image: mysql:8.0
+    image: mysql
     environment:
       TZ: Asia/Shanghai
-      MYSQL_ROOT_PASSWORD: root_531642
+      MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: mydb
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - 3306:3306
     networks:
       - backend
 
@@ -47,18 +49,31 @@ services:
     command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec"] # AOF操作持久化
     # command: ["redis-server", "--save", "900 1", "--save", "300 10", "--save", "60 10000"] # RDB快照持久化
 
-
-  clickhouse-server:
-    image: yandex/clickhouse-server
-    container_name: clickhouse-server
+  # clickhouse-server:
+  #   image: clickhouse/clickhouse-server
+  #   ports:
+  #     - 18123:8123
+  #     - 19000:9000
+  #     - 19009:9009
+  #   volumes:
+  #     - clickhouse_data:/var/lib/clickhouse
+  #   networks:
+  #     - backend
+  clickhouse:
+    build:
+      context: ./Dockerfiles/clickhouse
+      dockerfile: clickhouse.dockerfile
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      - ./etc/clickhouse/config.xml:/etc/clickhouse-server/config.xml
+    networks:
+      - backend
     ports:
       - "8123:8123"
       - "9000:9000"
       - "9009:9009"
-    volumes:
-      - clickhouse_data:/var/lib/clickhouse
-    networks:
-      - backend
+    environment:
+      - TZ=Asia/Shanghai
 
   # kafka:
   #   image: wurstmeister/kafka

@@ -18,4 +18,11 @@ if ! composer show | grep -q "topthink/think-swoole"; then
 else
   echo "topthink/think-swoole already exists. Skipping."
 fi
+# 检查并安装 GuzzleHttp
+if ! composer show | grep -q "guzzlehttp/guzzle"; then
+  echo "Installing GuzzleHttp..."
+  composer require guzzlehttp/guzzle
+else
+  echo "GuzzleHttp already exists. Skipping."
+fi
 exec php think swoole

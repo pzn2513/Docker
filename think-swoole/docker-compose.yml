@@ -53,10 +53,9 @@ services:
     image: clickhouse/clickhouse-server
     ports:
       - 8123:8123
-      - 9000:9000
-      - 9009:9009
     volumes:
       - clickhouse_data:/var/lib/clickhouse
+      - ./etc/clickhouse/users.xml:/etc/clickhouse-server/users.xml
     networks:
       - backend
   # clickhouse:

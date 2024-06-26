@@ -1,70 +1,54 @@
-# Docker
-Docker相关功能实践，对学习到的知识进行汇总记录
+# think-swoole 分支
+## 统一LF设置，不然entrypoint.sh等LF换行可能会在win被替代为CRLF，在启动运行时报错：git config --global core.autocrlf input
+## 1. 自动重载和配置
 
-安装环境：centos7.6  
-docker安装
-```bash
-yum install -y yum-utils device-mapper-persistent-data lvm2
-yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-yum makecache fast
-yum -y install docker-ce
-systemctl start docker
-```
+- `app` 控制器的修改可以自动重载，但配置文件的修改需要重启服务才生效。
 
-docker-compose安装
-```bash
-curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
-ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-```
+- 在 Docker 容器间配置 MySQL 时，使用服务名而不是 `localhost`：
+    ```php
+    'hostname' => env('DB_HOST', 'mysql'),
+    ```
 
-## 配置nginx+php+mysql+phpmyadmin
-### 要点：
-#### 1、php用fpm版本，并用dockerfile进行拓展编译
-docker build -t myphp .
-#### 2、用docker-compose组织并启动lnmp
-docker-compose up -d
-#### 3、nginx需要配置php-fpm  
-nginx配置文件在：  
-/etc/nginx/conf.d/default.conf  
-网站目录：  
-/usr/share/nginx/html  
-加入以下代码
-```bash
-    location ~ \.php$ {
-        root           html;
-        fastcgi_pass   172.24.0.3:9000;#此处需要填写你的php容器的docker内部通讯ip
-        fastcgi_index  index.php;
-        fastcgi_param  SCRIPT_FILENAME  /usr/share/nginx/html/$fastcgi_script_name;
-        include        fastcgi_params;
+- 根目录下 `.env` 文件开启调试模式：
+    ```dotenv
+    APP_DEBUG=true
+    ```
+
+- 用以下方法测试数据库连接：
+    ```php
+    use think\facade\Db;
+
+    public function test_db()
+    {
+        $result = Db::table('mysql.user')
+                    ->where('user', 'root')
+                    ->field('user, host, plugin, authentication_string')
+                    ->select();
+        return json($result);
     }
-```
+    ```
 
-#### 4、mysql指定初始密码，并修改加密方式  
-进入mysql容器：docker exec -it mysql bash  
-改密码及加密方式(不改密码会拒绝非本地登陆方式)：
-```bash
-alter user 'root'@'%' identified with mysql_native_password by 'password';
-flush privileges;
-```
+## 2. 端口占用和 Redis 配置
 
-#### 5、下载并配置phpmyadmin
-https://www.phpmyadmin.net/downloads/  
-config.inc.php是它的配置文件，默认没有。可以cp config.sample.inc.php config.inc.php  
-连接问题：将config.inc.php中
-```bash
-$cfg['Servers'][$i]['host'] = 'mysql ip';
-```
-缓存问题：在phpmyadmin目录下
-```bash
-mkdir tmp
-chmod 777 tmp
-```
-短语密码：将config.inc.php中
-```bash
-$cfg['blowfish_secret'] = 'qwertyuioplkjhgfdsazxcvbnm123456';
-```
-# docker高级指令
-```bash
-docker inspect -f '{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -q)
-```
+- 若本地有 3306 端口占用，Docker 映射冲突不会明显报错，但会映射失败。
+
+- 已配置好 Redis 拓展，可以使用以下代码测试 Redis 连接：
+    ```php
+    use Redis;
+
+    public function test_redis()
+    {
+        // 创建 Redis 对象
+        $redis = new Redis();
+        $redis->connect('redis', 6379);
+        $redis->set('test_key', 'Hello, Redis!');
+        $value = $redis->get('test_key');
+        $redis->close();
+        return $value;
+    }
+    ```
+
+## 3. ClickHouse 自构建
+
+- 选择自构建 ClickHouse，按需逐步拓展。
+- 配置文件使用自定义的 `config.xml`，并附官方的 `config.full.xml` 供参考。

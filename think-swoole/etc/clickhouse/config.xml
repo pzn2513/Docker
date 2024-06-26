@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<clickhouse>
+    <!-- 网络设置 -->
+    <http_port>8123</http_port>
+    <tcp_port>9000</tcp_port>
+    <mysql_port>9004</mysql_port>
+    <listen_host>0.0.0.0</listen_host>
+
+    <!-- 资源限制 -->
+    <profiles>
+        <default>
+            <max_memory_usage>10000000000</max_memory_usage>
+            <use_uncompressed_cache>1</use_uncompressed_cache>
+            <load_balancing>random</load_balancing>
+            <max_threads>8</max_threads>
+        </default>
+    </profiles>
+
+    <!-- 用户配置 -->
+    <users>
+        <default>
+            <profile>default</profile>
+            <networks>
+                <ip>::/0</ip>
+                <ip>0.0.0.0/0</ip>
+            </networks>
+            <password>default_password</password>
+        </default>
+    </users>
+</clickhouse>

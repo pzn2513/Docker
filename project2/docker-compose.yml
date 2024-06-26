@@ -1,0 +1,13 @@
+version: '3'
+services:
+  service2:
+    build:
+      context: ./service2
+    networks:
+      - shared
+    ports:
+      - "3002:3000"
+
+networks:
+  shared:
+    external: true

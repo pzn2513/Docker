@@ -1,5 +1,5 @@
 # think-swoole 分支
-
+## 统一LF设置，不然entrypoint.sh等LF换行可能会在win被替代为CRLF，在启动运行时报错：git config --global core.autocrlf input
 ## 1. 自动重载和配置
 
 - `app` 控制器的修改可以自动重载，但配置文件的修改需要重启服务才生效。

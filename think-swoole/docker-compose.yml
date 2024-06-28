@@ -1,5 +1,6 @@
 services:
   php:
+    hostname: php
     build:
       context: ./Dockerfiles/php
       dockerfile: php.dockerfile
@@ -9,6 +10,7 @@ services:
     networks:
       - backend
   nginx:
+    hostname: nginx
     image: nginx
     ports:
       - 80:80
@@ -24,6 +26,7 @@ services:
     environment:
       - TZ=Asia/Shanghai
   mysql:
+    hostname: mysql
     image: mysql
     environment:
       TZ: Asia/Shanghai
@@ -39,6 +42,7 @@ services:
       - backend
 
   redis:
+    hostname: redis
     image: redis
     volumes:
       - redis_data:/data
@@ -50,6 +54,7 @@ services:
     # command: ["redis-server", "--save", "900 1", "--save", "300 10", "--save", "60 10000"] # RDB快照持久化
 
   clickhouse:
+    hostname: clickhouse
     image: clickhouse/clickhouse-server
     ports:
       - 8123:8123
@@ -60,6 +65,7 @@ services:
       - backend
 
   elasticsearch:
+    hostname: elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:8.14.1
     environment:
       - discovery.type=single-node
@@ -72,13 +78,13 @@ services:
       - backend
     volumes:
       - esdata:/usr/share/elasticsearch/data
+      - ./etc/elasticsearch/plugins:/usr/share/elasticsearch/plugins
   kibana:
+    hostname: kibana
     image: docker.elastic.co/kibana/kibana:8.14.1
     environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
       - ELASTICSEARCH_USERNAME=kibana_system
       - ELASTICSEARCH_PASSWORD=changeme
-      - i18n.locale=zh-CN
     volumes:
       - ./etc/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
     ports:

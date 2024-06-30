@@ -4,6 +4,7 @@ services:
     build:
       context: ./Dockerfiles/php
       dockerfile: php.dockerfile
+    # image: ghini/think-swoole-php
     volumes:
       - ./wwwroot:/wwwroot
       - ./etc/php/php.ini:/usr/local/etc/php/php.ini

@@ -4,8 +4,11 @@
 if [ ! -d "/wwwroot/tp" ]; then
   echo "Project directory does not exist. Creating project..."
   composer create-project topthink/think /wwwroot/tp
+  mv /home/Test.php /wwwroot/tp/app/controller/Test.php
+  mv /home/.env /wwwroot/tp/.env  
 else
   echo "Project directory already exists. Skipping project creation."
+  rm -rf /home/*
 fi
 
 # 进入 tp 目录并确保权限
@@ -25,4 +28,5 @@ if ! composer show | grep -q "guzzlehttp/guzzle"; then
 else
   echo "GuzzleHttp already exists. Skipping."
 fi
+
 exec php think swoole

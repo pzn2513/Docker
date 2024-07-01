@@ -1,18 +1,23 @@
 services:
   php:
     hostname: php
-    build:
-      context: ./Dockerfiles/php
-      dockerfile: php.dockerfile
-    # image: ghini/think-swoole-php
+    # build:
+    #   context: ./Dockerfiles/php
+    #   dockerfile: php.dockerfile
+    image: ghini/php-think-swoole
+    environment:
+      - TZ=Asia/Shanghai
     volumes:
       - ./wwwroot:/wwwroot
       - ./etc/php/php.ini:/usr/local/etc/php/php.ini
     networks:
       - backend
+    
   nginx:
     hostname: nginx
     image: nginx
+    environment:
+      - TZ=Asia/Shanghai
     ports:
       - 80:80
       - 443:443
@@ -20,21 +25,18 @@ services:
       - ./wwwroot:/wwwroot
       - ./etc/nginx/ssl:/etc/nginx/ssl
       - ./etc/nginx/conf.d:/etc/nginx/conf.d
-    depends_on:
-      - php
     networks:
       - backend
-    environment:
-      - TZ=Asia/Shanghai
+    
   mysql:
     hostname: mysql
     image: mysql
     environment:
-      TZ: Asia/Shanghai
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: mydb
-      MYSQL_USER: myuser
-      MYSQL_PASSWORD: mypassword
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=mydb
+      - MYSQL_USER=myuser
+      - MYSQL_PASSWORD=mypassword
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
@@ -45,6 +47,8 @@ services:
   redis:
     hostname: redis
     image: redis
+    environment:
+      - TZ=Asia/Shanghai
     volumes:
       - redis_data:/data
     ports:
@@ -57,6 +61,8 @@ services:
   clickhouse:
     hostname: clickhouse
     image: clickhouse/clickhouse-server
+    environment:
+      - TZ=Asia/Shanghai
     ports:
       - 8123:8123
     volumes:
@@ -69,12 +75,12 @@ services:
     hostname: elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:${ES_VERSION}
     environment:
+      - TZ=Asia/Shanghai
       - discovery.type=single-node
       - ELASTIC_PASSWORD=changeme
       - xpack.security.enabled=false
     ports:
       - "9200:9200"
-      - "9300:9300"
     networks:
       - backend
     volumes:
@@ -84,6 +90,7 @@ services:
     hostname: kibana
     image: docker.elastic.co/kibana/kibana:${ES_VERSION}
     environment:
+      - TZ=Asia/Shanghai
       - ELASTICSEARCH_USERNAME=kibana_system
       - ELASTICSEARCH_PASSWORD=changeme
     volumes:
@@ -95,17 +102,30 @@ services:
   filebeat:
     hostname: filebeat
     image: docker.elastic.co/beats/filebeat:${ES_VERSION}
+    environment:
+      - TZ=Asia/Shanghai
     user: root
     command: ["filebeat", "-e", "--strict.perms=false"]
     volumes:
       - ./etc/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     depends_on:
       - elasticsearch
     networks:
       - backend
+  logstash:
+    hostname: logstash
+    image: docker.elastic.co/logstash/logstash:${ES_VERSION}
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./etc/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    ports:
+      - "5044:5044"
+    networks:
+      - backend
+    depends_on:
+      - elasticsearch
 
   # kafka:
   #   image: wurstmeister/kafka

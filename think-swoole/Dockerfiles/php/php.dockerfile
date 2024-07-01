@@ -29,7 +29,7 @@ RUN pecl install redis \
 
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-COPY Test.php /home/Test.php
-COPY .env /home/.env
+COPY Test.php /home/_Ghini_build/Test.php
+COPY .env /home/_Ghini_build/.env
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

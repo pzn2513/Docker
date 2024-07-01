@@ -11,9 +11,17 @@ filebeat.inputs:
     paths:
       - /var/lib/docker/containers/*/*.log
 
-output.elasticsearch:
-  hosts: '${ELASTICSEARCH_HOSTS:elasticsearch:9200}'
+processors:
+  - add_fields:
+      target: '@metadata'
+      fields:
+        beat: 'filebeat'
+        version: '8.14.1'
 
+# output.elasticsearch:
+#   hosts: '${ELASTICSEARCH_HOSTS:elasticsearch:9200}'
+output.logstash:
+  hosts: ["logstash:5044"]
 
 # setup.kibana:
 #   host: "http://kibana:5601"

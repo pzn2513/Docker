@@ -1,27 +1,22 @@
 filebeat.config:
   modules:
-    path: ${path.config}/modules.d/*.yml
+    path: ${path.config}/modules.d/*.yml #/usr/share/filebeat/modules.d/*.yml
     reload.enabled: false
 
 filebeat.inputs:
   - type: log
     paths:
       - /home/*.log
-  - type: container
-    paths:
-      - /var/lib/docker/containers/*/*.log
-
+    
 processors:
-  - add_fields:
-      target: '@metadata'
-      fields:
-        beat: 'filebeat'
-        version: '8.14.1'
+  - drop_fields:
+      # tags @xxx event后面默认加上，去不掉
+      fields: ["ecs","host","agent","log.offset","input"]
 
-# output.elasticsearch:
-#   hosts: '${ELASTICSEARCH_HOSTS:elasticsearch:9200}'
-output.logstash:
-  hosts: ["logstash:5044"]
+# output.logstash:
+#   hosts: ["logstash:5044"]
+output.elasticsearch:
+  hosts: ["elasticsearch:9200"]
 
-# setup.kibana:
-#   host: "http://kibana:5601"
+
+logging.level: error  # error, info 或 debug

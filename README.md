@@ -1,13 +1,9 @@
-<div style="font-size: 32px; ">
-    ✨ <span style="font-family: '思源黑体', sans-serif; font-weight: bold; 
-            background: -webkit-linear-gradient(45deg, #f3ec78, #af4261); 
-            -webkit-background-clip: text; color: transparent; 
-            text-align: center; margin-top: 20px;">think-swoole 分支</span> 🚀
-</div>
 
+# ✨ think-swoole 分支 🚀
+===================================
 ## 准备工作
-1. Git设置，统一LF设置，不然entrypoint.sh等LF换行可能会在win被替代为CRLF，导致sh脚本启动运行时报错
-2. 最好需要能连上外网环境，避免有网络异常，compose构建时遇到异常尝试多运行几次
+1. Git设置，统一LF设置，不然entrypoint.sh等LF换行可能会在win被替代为CRLF，导致sh脚本启动运行时报错(1.3版本后不需要，但还是建议修改)
+2. 最好需要能连上外网环境，避免有网络异常，compose构建时遇到异常尝试多运行几次(1.3版本后基本不需要)
 ```bash
 # Windows系统
 git config --global core.autocrlf input

@@ -108,7 +108,7 @@ services:
     command: ["filebeat", "-e", "--strict.perms=false"]
     volumes:
       - ./etc/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - ./etc/filebeat/test.log:/home/test.log
     depends_on:
       - elasticsearch
     networks:
@@ -126,36 +126,19 @@ services:
       - backend
     depends_on:
       - elasticsearch
-
-  # kafka:
-  #   image: wurstmeister/kafka
-  #   ports:
-  #     - "9092:9092"
-  #   environment:
-  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-  #     KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-  #   # volumes:
-  #   #   - ./etc/kafka:/etc/kafka # 挂载自定义的 kafka 配置
-  #   depends_on:
-  #     - zookeeper
-  #   networks:
-  #     - backend
-
-  # zookeeper:
-  #   image: wurstmeister/zookeeper
-  #   ports:
-  #     - "2181:2181"
-  #   networks:
-  #     - backend
-
-  # rabbitmq:
-  #   image: rabbitmq:management
-  #   ports:
-  #     - "5672:5672"
-  #     - "15672:15672"
-  #   networks:
-  #     - backend
+  kafka:
+    hostname: kafka
+    image: apache/kafka
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - kafka_data:/kafka/data
+      - ./etc/kafka/server.properties:/etc/kafka/docker/server.properties
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    networks:
+      - backend
 
 networks:
   backend:
@@ -166,3 +149,4 @@ volumes:
   clickhouse_data:
   redis_data:
   esdata:
+  kafka_data:

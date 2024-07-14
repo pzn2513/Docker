@@ -1,10 +1,10 @@
 services:
   php:
     hostname: php
-    # build:
-    #   context: ./Dockerfiles/php
-    #   dockerfile: php.dockerfile
-    image: ghini/php-think-swoole
+    build:
+      context: ./Dockerfiles/php
+      dockerfile: php.dockerfile
+    # image: ghini/php-think-swoole
     environment:
       - TZ=Asia/Shanghai
     volumes:

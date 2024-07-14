@@ -72,13 +72,13 @@ class Test extends BaseController
         return json(['status' => 'success', 'message' => $message, 'result' => 'Message produced to Kafka']);
     }
     // 消费消息 (仅举例，控制器中不适合长时间运行，后台处理的内容）
+    // 连接费时长，连上之后传输很快。
     public function consume()
     {
         $conf = new Conf();
         $conf->set('metadata.broker.list', 'kafka:9092');
         $conf->set('group.id', uniqid()); // 使用固定的消费者组 ID
         $conf->set('auto.offset.reset', 'earliest'); // 从最早的消息开始消费 earliest latest
-
         $consumer = new KafkaConsumer($conf);
         $consumer->subscribe(['my-topic']);
         while (true) {

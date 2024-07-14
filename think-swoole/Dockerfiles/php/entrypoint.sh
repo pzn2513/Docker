@@ -1,16 +1,16 @@
 #!/bin/sh
 
-# 检查 tp 项目是否存在，如果不存在则创建并移预设（不覆盖），如果存在则跳过创建删除预设
+# 检查 tp 项目是否存在，如果不存在则创建并复制预设，如果存在则跳过创建
 if [ ! -d "/wwwroot/tp" ]; then
   echo "Project directory does not exist. Creating project..."
   composer create-project topthink/think /wwwroot/tp
-  mv -n /home/_Ghini_build/Test.php /wwwroot/tp/app/controller/Test.php
-  echo "Moved /home/_Ghini_build/Test.php to /wwwroot/tp/app/controller/Test.php"
-  mv -n /home/_Ghini_build/.env /wwwroot/tp/.env
-  echo "Moved /home/_Ghini_build/.env to /wwwroot/tp/.env"
+  cp /home/.ghini_build/Test.php /wwwroot/tp/app/controller/Test.php
+  echo "Moved /home/.ghini_build/Test.php to /wwwroot/tp/app/controller/Test.php"
+  cp /home/.ghini_build/.env /wwwroot/tp/.env
+  echo "Moved /home/.ghini_build/.env to /wwwroot/tp/.env"
 else
-  # echo "Project directory already exists. Skipping project creation. rm -rf /home/_Ghini_build"
-  rm -rf /home/_Ghini_build
+  echo "Project directory already exists. Skipping project creation."
+  # rm -rf /home/.ghini_build
 fi
 
 # 进入 tp 目录并确保权限

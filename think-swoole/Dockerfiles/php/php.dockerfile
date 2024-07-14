@@ -32,7 +32,7 @@ RUN pecl install rdkafka \
 
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-COPY Test.php /home/_Ghini_build/Test.php
-COPY .env /home/_Ghini_build/.env
+COPY Test.php /home/.ghini_build/Test.php
+COPY .env /home/.ghini_build/.env
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

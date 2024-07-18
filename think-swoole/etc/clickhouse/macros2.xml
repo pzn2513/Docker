@@ -1,0 +1,6 @@
+<clickhouse>
+    <macros>
+        <shard>1</shard>
+        <replica>ip107</replica>
+    </macros>
+</clickhouse>

@@ -82,12 +82,13 @@ services:
       - 8123:8123
       - 9000:9000
       - 9181:9181
+      - 9234:9234
     volumes:
       - clickhouse_data:/var/lib/clickhouse
       # - ./etc/clickhouse/default/config.xml:/etc/clickhouse-server/config.xml
       - ./etc/clickhouse/config.cluster.xml:/etc/clickhouse-server/config.xml 
       - ./etc/clickhouse/users.xml:/etc/clickhouse-server/users.xml
-      - ./etc/clickhouse/keeper_config1.xml:/etc/clickhouse-keeper/keeper_config.xml
+      # - ./etc/clickhouse/keeper_config1.xml:/etc/clickhouse-keeper/keeper_config.xml
     networks:
       - backend
     extra_hosts: *extra_hosts

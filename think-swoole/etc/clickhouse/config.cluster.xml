@@ -799,116 +799,47 @@
 
     <!-- Reallocate memory for machine code ("text") using huge pages. Highly experimental. -->
     <remap_executable>false</remap_executable>
-
-    <![CDATA[
-         Uncomment below in order to use JDBC table engine and function.
-
-         To install and run JDBC bridge in background:
-         * [Debian/Ubuntu]
-           export MVN_URL=https://repo1.maven.org/maven2/com/clickhouse/clickhouse-jdbc-bridge/
-           export PKG_VER=$(curl -sL $MVN_URL/maven-metadata.xml | grep '<release>' | sed -e 's|.*>\(.*\)<.*|\1|')
-           wget https://github.com/ClickHouse/clickhouse-jdbc-bridge/releases/download/v$PKG_VER/clickhouse-jdbc-bridge_$PKG_VER-1_all.deb
-           apt install --no-install-recommends -f ./clickhouse-jdbc-bridge_$PKG_VER-1_all.deb
-           clickhouse-jdbc-bridge &
-
-         * [CentOS/RHEL]
-           export MVN_URL=https://repo1.maven.org/maven2/com/clickhouse/clickhouse-jdbc-bridge/
-           export PKG_VER=$(curl -sL $MVN_URL/maven-metadata.xml | grep '<release>' | sed -e 's|.*>\(.*\)<.*|\1|')
-           wget https://github.com/ClickHouse/clickhouse-jdbc-bridge/releases/download/v$PKG_VER/clickhouse-jdbc-bridge-$PKG_VER-1.noarch.rpm
-           yum localinstall -y clickhouse-jdbc-bridge-$PKG_VER-1.noarch.rpm
-           clickhouse-jdbc-bridge &
-
-         Please refer to https://github.com/ClickHouse/clickhouse-jdbc-bridge#usage for more information.
-    ]]>
-    <!--
-    <jdbc_bridge>
-        <host>127.0.0.1</host>
-        <port>9019</port>
-    </jdbc_bridge>
-    -->
-
-    <!-- Configuration of clusters that could be used in Distributed tables.
-         https://clickhouse.com/docs/en/operations/table_engines/distributed/
-      -->
-    <remote_servers>
-        <!-- Test only shard config for testing distributed storage -->
+    <!-- <remote_servers>
         <default>
-            <!-- Inter-server per-cluster secret for Distributed queries
-                 default: no secret (no authentication will be performed)
-
-                 If set, then Distributed queries will be validated on shards, so at least:
-                 - such cluster should exist on the shard,
-                 - such cluster should have the same secret.
-
-                 And also (and which is more important), the initial_user will
-                 be used as current user for the query.
-
-                 Right now the protocol is pretty simple, and it only takes into account:
-                 - cluster name
-                 - query
-
-                 Also, it will be nice if the following will be implemented:
-                 - source hostname (see interserver_http_host), but then it will depend on DNS,
-                   it can use IP address instead, but then you need to get correct on the initiator node.
-                 - target hostname / ip address (same notes as for source hostname)
-                 - time-based security tokens
-            -->
-            <!-- <secret></secret> -->
-
             <shard>
-                <!-- Optional. Whether to write data to just one of the replicas. Default: false (write data to all replicas). -->
-                <!-- <internal_replication>false</internal_replication> -->
-                <!-- Optional. Shard weight when writing data. Default: 1. -->
-                <!-- <weight>1</weight> -->
                 <replica>
-                    <host>ip104.local</host>
+                    <host>localhost</host>
+                    <port>9000</port>
+                </replica>
+                <replica>
+                    <host>ip103.local</host>
                     <port>9000</port>
                 </replica>
                 <replica>
                     <host>ip107.local</host>
                     <port>9000</port>
                 </replica>
-                <!-- Optional. Priority of the replica for load_balancing. Default: 1 (less value has more priority). -->
-                <!-- <priority>1</priority> -->
-                <!-- Use SSL? Default: no -->
-                <!-- <secure>0</secure> -->
             </shard>
         </default>
-    </remote_servers>
-
-    <!-- The list of hosts allowed to use in URL-related storage engines and table functions.
-        If this section is not present in configuration, all hosts are allowed.
-    -->
-    <!--<remote_url_allow_hosts>-->
-        <!-- Host should be specified exactly as in URL. The name is checked before DNS resolution.
-            Example: "clickhouse.com", "clickhouse.com." and "www.clickhouse.com" are different hosts.
-                    If port is explicitly specified in URL, the host:port is checked as a whole.
-                    If host specified here without port, any port with this host allowed.
-                    "clickhouse.com" -> "clickhouse.com:443", "clickhouse.com:80" etc. is allowed, but "clickhouse.com:80" -> only "clickhouse.com:80" is allowed.
-            If the host is specified as IP address, it is checked as specified in URL. Example: "[2a02:6b8:a::a]".
-            If there are redirects and support for redirects is enabled, every redirect (the Location field) is checked.
-            Host should be specified using the host xml tag:
-                    <host>clickhouse.com</host>
-        -->
-
-        <!-- Regular expression can be specified. RE2 engine is used for regexps.
-            Regexps are not aligned: don't forget to add ^ and $. Also don't forget to escape dot (.) metacharacter
-            (forgetting to do so is a common source of error).
-        -->
-    <!--</remote_url_allow_hosts>-->
-
-    <!-- The list of HTTP headers forbidden to use in HTTP-related storage engines and table functions.
-        If this section is not present in configuration, all headers are allowed.
-    -->
-    <!-- <http_forbid_headers>
-        <header>exact_header</header>
-        <header_regexp>(?i)(case_insensitive_header)</header_regexp>
-    </http_forbid_headers> -->
-
-    <!-- If element has 'incl' attribute, then for it's value will be used corresponding substitution from another file.
-         By default, path to file with substitutions is /etc/metrika.xml. It could be changed in config in 'include_from' element.
-         Values for substitutions are specified in /clickhouse/name_of_substitution elements in that file.
-      -->
+    </remote_servers> -->
+    <!-- <keeper_server>
+        <tcp_port>9181</tcp_port>
+        <server_id>1</server_id>
+        <log_storage_path>/var/lib/clickhouse/coordination/log</log_storage_path>
+        <snapshot_storage_path>/var/lib/clickhouse/coordination/snapshots</snapshot_storage_path>
+        <coordination_settings>
+            <operation_timeout_ms>10000</operation_timeout_ms>
+            <session_timeout_ms>30000</session_timeout_ms>
+            <raft_logs_level>trace</raft_logs_level>
+        </coordination_settings>
+        <raft_configuration>
+            <server>
+                <id>1</id>
+                <hostname>ip103.local</hostname>
+                <port>9181</port>
+            </server>
+            <server>
+                <id>2</id>
+                <hostname>ip107.local</hostname>
+                <port>9181</port>
+            </server>
+        </raft_configuration>
+    </keeper_server> -->
 
     <!-- ZooKeeper is used to store metadata about replicas, when using Replicated tables.
          Optional. If you don't use replicated tables, you could omit that.
@@ -932,16 +863,7 @@
         </node>
     </zookeeper>
     -->
-    <keeper>
-        <node>
-            <host>ip104.local</host>
-            <port>9181</port>
-        </node>
-        <node>
-            <host>ip107.local</host>
-            <port>9181</port>
-        </node>
-    </keeper>
+
     <!-- Substitutions for parameters of replicated tables.
           Optional. If you don't use replicated tables, you could omit that.
 
